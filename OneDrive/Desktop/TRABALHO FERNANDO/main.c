@@ -60,4 +60,41 @@ int menu(){
 	
 	return opcao;
 }
+/*Função para avaliar se a data digitada pelo usuário existe no calendário, com return 1 sendo verdadeiro e return 0 falso*/
+int validarData(int dia, int mes, int ano){
+	/*teste para saber a viabilidade de anos,considerando seu começo como 1*/
+	if(ano < 1){
+		return 0;
+	}
+	/*Teste para saber a viabilidade de meses no interválo de 1 a 12*/
+	if(mes <1 || mes > 12){
+		return 0;
+	}
+	/*Teste para saber se a data não ultrapassa o limite do mês ou ano*/
+	if(dia < 1 || dia > diasNoMes(mes,ano)){
+		return 0;
+	}
+	return 1;
+}
+/*Função que converte os dias decorridos de 01/01/0001 até a data válida em questão*/
+long dataParaDias(int dia, int mes, int ano){
+	long total = 0;
+	int i;
+	
+	/*Soma os dias totais de cada ano anterior,incluindo os bissextos,até o atual,sendo que o atual não é contado da mesma forma que os seus antecessores*/
+	for(i = 1;i < ano; i++){
+		if(ehBissexto(i) == 1){
+			total = total + 366;
+		}else{
+			total = total + 365;
+		}
+	}
+	/*Soma os dias de cada mês passado do ano atual,com o atual fora dessa conta*/
+	for(i = 1;i < mes;i++){
+		total = total+ diasNoMes(i, ano);
+	}
+	/*Soma os dias do mês atual,que não foram considerados anteriormente*/
+	total = total + dia;
+	return total;
+}
 
